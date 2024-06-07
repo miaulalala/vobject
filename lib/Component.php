@@ -2,10 +2,6 @@
 
 namespace Sabre\VObject;
 
-use InvalidArgumentException;
-use ReturnTypeWillChange;
-use RuntimeException;
-use Sabre\VObject;
 use Sabre\Xml;
 
 /**
@@ -18,7 +14,7 @@ use Sabre\Xml;
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  *
- * @property VObject\Property\FlatText UID
+ * @property Property\FlatText UID
  */
 class Component extends Node
 {
@@ -107,14 +103,14 @@ class Component extends Node
 
         if ($arguments[0] instanceof Node) {
             if (isset($arguments[1])) {
-                throw new InvalidArgumentException('The second argument must not be specified, when passing a VObject Node');
+                throw new \InvalidArgumentException('The second argument must not be specified, when passing a VObject Node');
             }
             $arguments[0]->parent = $this;
             $newNode = $arguments[0];
         } elseif (is_string($arguments[0])) {
             $newNode = call_user_func_array([$this->root, 'create'], $arguments);
         } else {
-            throw new InvalidArgumentException('The first argument must either be a \\Sabre\\VObject\\Node or a string');
+            throw new \InvalidArgumentException('The first argument must either be a \\Sabre\\VObject\\Node or a string');
         }
 
         /** @var Component|Property|Parameter $newNode */
@@ -163,7 +159,7 @@ class Component extends Node
                 }
             }
 
-            throw new InvalidArgumentException('The item you passed to remove() was not a child of this component');
+            throw new \InvalidArgumentException('The item you passed to remove() was not a child of this component');
         }
     }
 
@@ -326,7 +322,7 @@ class Component extends Node
      * This method returns an array, with the representation as it should be
      * encoded in JSON. This is used to create jCard or jCal documents.
      */
-    #[ReturnTypeWillChange]
+    #[\ReturnTypeWillChange]
     public function jsonSerialize(): array
     {
         $components = [];
@@ -420,7 +416,7 @@ class Component extends Node
     public function __get(string $name): ?Node
     {
         if ('children' === $name) {
-            throw new RuntimeException('Starting sabre/vobject 4.0 the children property is now protected. You should use the children() method instead');
+            throw new \RuntimeException('Starting sabre/vobject 4.0 the children property is now protected. You should use the children() method instead');
         }
 
         $matches = $this->select($name);
@@ -453,8 +449,6 @@ class Component extends Node
      *
      * If the item already exists, it will be removed. If you want to add
      * a new item with the same name, always use the add() method.
-     *
-     * @param mixed $value
      */
     public function __set(string $name, $value): void
     {

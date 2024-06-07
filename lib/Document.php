@@ -2,8 +2,6 @@
 
 namespace Sabre\VObject;
 
-use Sabre\VObject;
-
 /**
  * Document.
  *
@@ -18,7 +16,7 @@ use Sabre\VObject;
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  *
- * @property VObject\Property\FlatText VERSION
+ * @property Property\FlatText VERSION
  */
 abstract class Document extends Component
 {
@@ -116,8 +114,6 @@ abstract class Document extends Component
      *
      * If it's a known component, we will automatically call createComponent.
      * otherwise, we'll assume it's a property and call createProperty instead.
-     *
-     * @return mixed
      */
     public function create(string $name)
     {
@@ -167,12 +163,11 @@ abstract class Document extends Component
      * parameters will automatically be created, or you can just pass a list of
      * Parameter objects.
      *
-     * @param mixed       $value
-     * @param string|null $valueType Force a specific valuetype, such as URI or TEXT
+     * @param string|null $valueType Force a specific valueType, such as URI or TEXT
      *
      * @throws InvalidDataException
      */
-    public function createProperty(string $name, $value = null, ?array $parameters = null, ?string $valueType = null): Property
+    public function createProperty(string $name, $value = null, ?array $parameters = null, ?string $valueType = null, ?int $lineIndex = null, ?string $lineString = null): Property
     {
         // If there's a . in the name, it means it's prefixed by a group name.
         if (false !== ($i = strpos($name, '.'))) {
@@ -206,7 +201,7 @@ abstract class Document extends Component
             $parameters = [];
         }
 
-        return new $class($this, $name, $value, $parameters, $group);
+        return new $class($this, $name, $value, $parameters, $group, $lineIndex, $lineString);
     }
 
     /**

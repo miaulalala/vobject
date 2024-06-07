@@ -3,7 +3,6 @@
 namespace Sabre\VObject\Component;
 
 use PHPUnit\Framework\TestCase;
-use Sabre\VObject;
 use Sabre\VObject\Reader;
 
 class VFreeBusyTest extends TestCase
@@ -23,19 +22,19 @@ END:VFREEBUSY
 END:VCALENDAR
 BLA;
 
-        $obj = VObject\Reader::read($input);
+        $obj = Reader::read($input);
         $vfb = $obj->VFREEBUSY;
 
         $tz = new \DateTimeZone('UTC');
 
-        $this->assertFalse($vfb->isFree(new \DateTime('2012-09-12 01:15:00', $tz), new \DateTime('2012-09-12 01:45:00', $tz)));
-        $this->assertFalse($vfb->isFree(new \DateTime('2012-09-12 08:05:00', $tz), new \DateTime('2012-09-12 08:10:00', $tz)));
-        $this->assertFalse($vfb->isFree(new \DateTime('2012-09-12 10:15:00', $tz), new \DateTime('2012-09-12 10:45:00', $tz)));
+        self::assertFalse($vfb->isFree(new \DateTime('2012-09-12 01:15:00', $tz), new \DateTime('2012-09-12 01:45:00', $tz)));
+        self::assertFalse($vfb->isFree(new \DateTime('2012-09-12 08:05:00', $tz), new \DateTime('2012-09-12 08:10:00', $tz)));
+        self::assertFalse($vfb->isFree(new \DateTime('2012-09-12 10:15:00', $tz), new \DateTime('2012-09-12 10:45:00', $tz)));
 
         // Checking whether the end time is treated as non-inclusive
-        $this->assertTrue($vfb->isFree(new \DateTime('2012-09-12 09:00:00', $tz), new \DateTime('2012-09-12 09:15:00', $tz)));
-        $this->assertTrue($vfb->isFree(new \DateTime('2012-09-12 09:45:00', $tz), new \DateTime('2012-09-12 10:00:00', $tz)));
-        $this->assertTrue($vfb->isFree(new \DateTime('2012-09-12 11:00:00', $tz), new \DateTime('2012-09-12 12:00:00', $tz)));
+        self::assertTrue($vfb->isFree(new \DateTime('2012-09-12 09:00:00', $tz), new \DateTime('2012-09-12 09:15:00', $tz)));
+        self::assertTrue($vfb->isFree(new \DateTime('2012-09-12 09:45:00', $tz), new \DateTime('2012-09-12 10:00:00', $tz)));
+        self::assertTrue($vfb->isFree(new \DateTime('2012-09-12 11:00:00', $tz), new \DateTime('2012-09-12 12:00:00', $tz)));
     }
 
     public function testValidate(): void
@@ -59,6 +58,6 @@ HI;
             $messages[] = $warning['message'];
         }
 
-        $this->assertEquals([], $messages);
+        self::assertEquals([], $messages);
     }
 }

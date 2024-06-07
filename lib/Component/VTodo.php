@@ -2,7 +2,6 @@
 
 namespace Sabre\VObject\Component;
 
-use DateTimeInterface;
 use Sabre\VObject;
 
 /**
@@ -38,7 +37,7 @@ class VTodo extends VObject\Component
      *
      * @throws VObject\InvalidDataException
      */
-    public function isInTimeRange(DateTimeInterface $start, DateTimeInterface $end): bool
+    public function isInTimeRange(\DateTimeInterface $start, \DateTimeInterface $end): bool
     {
         $dtstart = isset($this->DTSTART) ? $this->DTSTART->getDateTime() : null;
         $duration = isset($this->DURATION) ? VObject\DateTimeParser::parseDuration($this->DURATION) : null;
@@ -53,8 +52,8 @@ class VTodo extends VObject\Component
                 return $start <= $effectiveEnd && $end > $dtstart;
             } elseif ($due) {
                 return
-                    ($start < $due || $start <= $dtstart) &&
-                    ($end > $dtstart || $end >= $due);
+                    ($start < $due || $start <= $dtstart)
+                    && ($end > $dtstart || $end >= $due);
             } else {
                 return $start <= $dtstart && $end > $dtstart;
             }
@@ -64,8 +63,8 @@ class VTodo extends VObject\Component
         }
         if ($completed && $created) {
             return
-                ($start <= $created || $start <= $completed) &&
-                ($end >= $created || $end >= $completed);
+                ($start <= $created || $start <= $completed)
+                && ($end >= $created || $end >= $completed);
         }
         if ($completed) {
             return $start <= $completed && $end >= $completed;

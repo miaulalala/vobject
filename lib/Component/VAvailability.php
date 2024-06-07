@@ -2,7 +2,6 @@
 
 namespace Sabre\VObject\Component;
 
-use DateTimeInterface;
 use Sabre\VObject;
 
 /**
@@ -32,13 +31,13 @@ class VAvailability extends VObject\Component
      *
      * @throws VObject\InvalidDataException
      */
-    public function isInTimeRange(DateTimeInterface $start, DateTimeInterface $end): bool
+    public function isInTimeRange(\DateTimeInterface $start, \DateTimeInterface $end): bool
     {
         list($effectiveStart, $effectiveEnd) = $this->getEffectiveStartEnd();
 
         return
-            (is_null($effectiveStart) || $start < $effectiveEnd) &&
-            (is_null($effectiveEnd) || $end > $effectiveStart)
+            (is_null($effectiveStart) || $start < $effectiveEnd)
+            && (is_null($effectiveEnd) || $end > $effectiveStart)
         ;
     }
 

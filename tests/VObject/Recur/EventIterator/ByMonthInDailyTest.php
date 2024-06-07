@@ -2,7 +2,6 @@
 
 namespace Sabre\VObject\Recur\EventIterator;
 
-use DateTime;
 use PHPUnit\Framework\TestCase;
 use Sabre\VObject\Component\VCalendar;
 use Sabre\VObject\Reader;
@@ -37,9 +36,9 @@ END:VCALENDAR
 ICS;
 
         $vcal = Reader::read($ics);
-        $this->assertInstanceOf(VCalendar::class, $vcal);
+        self::assertInstanceOf(VCalendar::class, $vcal);
 
-        $vcal = $vcal->expand(new DateTime('2013-09-28'), new DateTime('2014-09-11'));
+        $vcal = $vcal->expand(new \DateTime('2013-09-28'), new \DateTime('2014-09-11'));
 
         $dates = [];
         foreach ($vcal->VEVENT as $event) {
@@ -55,6 +54,6 @@ ICS;
             '20140907T160000Z',
         ];
 
-        $this->assertEquals($expectedDates, $dates, 'Recursed dates are restricted by month');
+        self::assertEquals($expectedDates, $dates, 'Recursed dates are restricted by month');
     }
 }

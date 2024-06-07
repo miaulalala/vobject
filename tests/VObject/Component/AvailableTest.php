@@ -2,8 +2,6 @@
 
 namespace Sabre\VObject\Component;
 
-use DateTimeImmutable;
-use DateTimeZone;
 use PHPUnit\Framework\TestCase;
 use Sabre\VObject\Reader;
 
@@ -22,7 +20,7 @@ END:AVAILABLE
 END:VCALENDAR
 VCAL;
         $document = Reader::read($vcal);
-        $this->assertInstanceOf(Available::class, $document->AVAILABLE);
+        self::assertInstanceOf(Available::class, $document->AVAILABLE);
     }
 
     public function testGetEffectiveStartEnd(): void
@@ -37,11 +35,11 @@ END:VCALENDAR
 VCAL;
 
         $document = Reader::read($vcal);
-        $tz = new DateTimeZone('UTC');
-        $this->assertEquals(
+        $tz = new \DateTimeZone('UTC');
+        self::assertEquals(
             [
-                new DateTimeImmutable('2015-07-17 16:22:00', $tz),
-                new DateTimeImmutable('2015-07-17 17:22:00', $tz),
+                new \DateTimeImmutable('2015-07-17 16:22:00', $tz),
+                new \DateTimeImmutable('2015-07-17 17:22:00', $tz),
             ],
             $document->AVAILABLE->getEffectiveStartEnd()
         );
@@ -59,11 +57,11 @@ END:VCALENDAR
 VCAL;
 
         $document = Reader::read($vcal);
-        $tz = new DateTimeZone('UTC');
-        $this->assertEquals(
+        $tz = new \DateTimeZone('UTC');
+        self::assertEquals(
             [
-                new DateTimeImmutable('2015-07-17 16:22:00', $tz),
-                new DateTimeImmutable('2015-07-17 17:22:00', $tz),
+                new \DateTimeImmutable('2015-07-17 16:22:00', $tz),
+                new \DateTimeImmutable('2015-07-17 17:22:00', $tz),
             ],
             $document->AVAILABLE->getEffectiveStartEnd()
         );

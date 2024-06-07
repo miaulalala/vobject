@@ -2,7 +2,6 @@
 
 namespace Sabre\VObject\Component;
 
-use ArrayAccess;
 use Sabre\VObject;
 use Sabre\Xml;
 
@@ -83,7 +82,7 @@ class VCard extends VObject\Document
         'ROLE' => VObject\Property\FlatText::class,
         'LOGO' => VObject\Property\Binary::class,
         // 'AGENT'   => 'Sabre\\VObject\\Property\\',      // Todo: is an embedded vCard. Probably rare, so
-                                 // not supported at the moment
+        // not supported at the moment
         'ORG' => VObject\Property\Text::class,
         'NOTE' => VObject\Property\FlatText::class,
         'REV' => VObject\Property\VCard\TimeStamp::class,
@@ -397,7 +396,7 @@ class VCard extends VObject\Document
      * This function will return null if the property does not exist. If there are
      * multiple properties with the same TYPE value, only one will be returned.
      *
-     * @return ArrayAccess|array|null
+     * @return \ArrayAccess|array|null
      */
     public function getByType(string $propertyName, string $type)
     {

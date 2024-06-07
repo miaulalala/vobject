@@ -2,7 +2,6 @@
 
 namespace Sabre\VObject;
 
-use InvalidArgumentException;
 use Sabre\VObject\Property\Binary;
 use Sabre\VObject\Property\Uri;
 
@@ -40,10 +39,10 @@ class VCardConverter
         }
 
         if (!in_array($inputVersion, [Document::VCARD21, Document::VCARD30, Document::VCARD40])) {
-            throw new InvalidArgumentException('Only vCard 2.1, 3.0 and 4.0 are supported for the input data');
+            throw new \InvalidArgumentException('Only vCard 2.1, 3.0 and 4.0 are supported for the input data');
         }
         if (!in_array($targetVersion, [Document::VCARD30, Document::VCARD40])) {
-            throw new InvalidArgumentException('You can only use vCard 3.0 or 4.0 for the target version');
+            throw new \InvalidArgumentException('You can only use vCard 3.0 or 4.0 for the target version');
         }
 
         $newVersion = Document::VCARD40 === $targetVersion ? '4.0' : '3.0';
@@ -94,8 +93,8 @@ class VCardConverter
         );
 
         if (Document::VCARD30 === $targetVersion) {
-            if ($property instanceof Property\Uri && in_array($property->name, ['PHOTO', 'LOGO', 'SOUND'])) {
-                /** @var Property\Uri $newProperty */
+            if ($property instanceof Uri && in_array($property->name, ['PHOTO', 'LOGO', 'SOUND'])) {
+                /** @var Uri $newProperty */
                 $newProperty = $this->convertUriToBinary($output, $newProperty);
             } elseif ($property instanceof Property\VCard\DateAndOrTime) {
                 // In vCard 4, the birth year may be optional. This is not the
@@ -154,8 +153,8 @@ class VCardConverter
                 return;
             }
 
-            if ($property instanceof Property\Binary) {
-                /** @var Property\Binary $newProperty */
+            if ($property instanceof Binary) {
+                /** @var Binary $newProperty */
                 $newProperty = $this->convertBinaryToUri($output, $newProperty, $parameters);
             } elseif ($property instanceof Property\VCard\DateAndOrTime && isset($parameters['X-APPLE-OMIT-YEAR'])) {
                 // If a property such as BDAY contained 'X-APPLE-OMIT-YEAR',
@@ -237,7 +236,7 @@ class VCardConverter
 
         // Lastly, we need to see if there's a need for a VALUE parameter.
         //
-        // We can do that by instantiating a empty property with that name, and
+        // We can do that by instantiating an empty property with that name, and
         // seeing if the default valueType is identical to the current one.
         $tempProperty = $output->createProperty($newProperty->name);
         if ($tempProperty->getValueType() !== $newProperty->getValueType()) {
@@ -257,7 +256,7 @@ class VCardConverter
      *
      * @throws InvalidDataException
      */
-    protected function convertBinaryToUri(Component\VCard $output, Property\Binary $newProperty, array &$parameters): Uri
+    protected function convertBinaryToUri(Component\VCard $output, Binary $newProperty, array &$parameters): Uri
     {
         $value = $newProperty->getValue();
         /** @var Uri $newProperty */
@@ -305,11 +304,11 @@ class VCardConverter
      * be valid in vCard 3.0 as well, we should convert those to BINARY if
      * possible, to improve compatibility.
      *
-     * @return Property\Binary|Property\Uri|null
+     * @return Binary|Uri|null
      *
      * @throws InvalidDataException
      */
-    protected function convertUriToBinary(Component\VCard $output, Property\Uri $newProperty): Property
+    protected function convertUriToBinary(Component\VCard $output, Uri $newProperty): Property
     {
         $value = $newProperty->getValue();
 

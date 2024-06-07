@@ -2,7 +2,6 @@
 
 namespace Sabre\VObject;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Sabre\VObject\Component\VCard;
 
@@ -50,7 +49,7 @@ OUT;
         $vcard = Reader::read($input);
         $vcard = $vcard->convert(Document::VCARD40);
 
-        $this->assertVObjectEqualsVObject(
+        self::assertVObjectEqualsVObject(
             $output,
             $vcard
         );
@@ -91,7 +90,7 @@ OUT;
         $vcard = Reader::read($input);
         $vcard = $vcard->convert(Document::VCARD40);
 
-        $this->assertVObjectEqualsVObject(
+        self::assertVObjectEqualsVObject(
             $output,
             $vcard
         );
@@ -133,7 +132,7 @@ OUT;
         $vcard = Reader::read($input);
         $vcard = $vcard->convert(Document::VCARD40);
 
-        $this->assertVObjectEqualsVObject(
+        self::assertVObjectEqualsVObject(
             $output,
             $vcard
         );
@@ -176,7 +175,7 @@ OUT;
         $vcard = Reader::read($input);
         $vcard = $vcard->convert(Document::VCARD30);
 
-        $this->assertVObjectEqualsVObject(
+        self::assertVObjectEqualsVObject(
             $output,
             $vcard
         );
@@ -220,7 +219,7 @@ OUT;
         $vcard = Reader::read($input);
         $vcard = $vcard->convert(Document::VCARD30);
 
-        $this->assertVObjectEqualsVObject(
+        self::assertVObjectEqualsVObject(
             $output,
             $vcard
         );
@@ -256,7 +255,7 @@ OUT;
         $vcard = Reader::read($input);
         $vcard = $vcard->convert(Document::VCARD40);
 
-        $this->assertVObjectEqualsVObject(
+        self::assertVObjectEqualsVObject(
             $output,
             $vcard
         );
@@ -276,7 +275,7 @@ OUT;
         $vcard = Reader::read($input);
         $vcard = $vcard->convert(Document::VCARD30);
 
-        $this->assertVObjectEqualsVObject(
+        self::assertVObjectEqualsVObject(
             $output,
             $vcard
         );
@@ -308,7 +307,7 @@ OUT;
         $vcard = Reader::read($input);
         $vcard = $vcard->convert(Document::VCARD40);
 
-        $this->assertVObjectEqualsVObject(
+        self::assertVObjectEqualsVObject(
             $output,
             $vcard
         );
@@ -326,7 +325,7 @@ OUT;
         $vcard = Reader::read($input);
         $vcard = $vcard->convert(Document::VCARD30);
 
-        $this->assertVObjectEqualsVObject(
+        self::assertVObjectEqualsVObject(
             $output,
             $vcard
         );
@@ -337,7 +336,7 @@ OUT;
      */
     public function testUnknownSourceVCardVersion(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $input = <<<IN
 BEGIN:VCARD
 VERSION:4.2
@@ -365,7 +364,7 @@ IN;
      */
     public function testUnknownTargetVCardVersion()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $input = <<<IN
 BEGIN:VCARD
 VERSION:3.0
@@ -404,7 +403,7 @@ OUT;
         $vcard = Reader::read($input);
         $vcard = $vcard->convert(Document::VCARD30);
 
-        $this->assertVObjectEqualsVObject(
+        self::assertVObjectEqualsVObject(
             $output,
             $vcard
         );
@@ -421,7 +420,7 @@ OUT;
         $vcard = Reader::read($input);
         $vcard = $vcard->convert(Document::VCARD40);
 
-        $this->assertVObjectEqualsVObject(
+        self::assertVObjectEqualsVObject(
             $output,
             $vcard
         );
@@ -454,7 +453,7 @@ OUT;
         $vcard = Reader::read($input);
         $vcard = $vcard->convert(Document::VCARD30);
 
-        $this->assertVObjectEqualsVObject(
+        self::assertVObjectEqualsVObject(
             $output,
             $vcard
         );
@@ -472,7 +471,7 @@ OUT;
         $vcard = Reader::read($input);
         $vcard = $vcard->convert(Document::VCARD40);
 
-        $this->assertVObjectEqualsVObject(
+        self::assertVObjectEqualsVObject(
             $output,
             $vcard
         );
@@ -513,7 +512,7 @@ OUT;
         $vcard = Reader::read($input);
         $vcard = $vcard->convert(Document::VCARD30);
 
-        $this->assertVObjectEqualsVObject(
+        self::assertVObjectEqualsVObject(
             $output,
             $vcard
         );
@@ -531,7 +530,7 @@ OUT;
         $vcard = Reader::read($input);
         $vcard = $vcard->convert(Document::VCARD40);
 
-        $this->assertVObjectEqualsVObject(
+        self::assertVObjectEqualsVObject(
             $output,
             $vcard
         );
@@ -555,7 +554,7 @@ VCF;
 
         $vcard = Reader::read($input);
 
-        $this->assertInstanceOf(Component\VCard::class, $vcard);
+        self::assertInstanceOf(VCard::class, $vcard);
         /** @var VCard $vcard */
         $vcard = $vcard->convert(Document::VCARD40);
         $vcard = $vcard->serialize();
@@ -578,7 +577,7 @@ END:VCARD
 
 VCF;
 
-        $this->assertEquals($expected, str_replace("\r", '', $vcard));
+        self::assertEquals($expected, str_replace("\r", '', $vcard));
     }
 
     /**
@@ -609,7 +608,7 @@ VCF;
         $vcard = Reader::read($input);
         $vcard = $vcard->convert(Document::VCARD40);
 
-        $this->assertVObjectEqualsVObject(
+        self::assertVObjectEqualsVObject(
             $output,
             $vcard
         );

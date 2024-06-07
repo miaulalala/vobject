@@ -35,7 +35,7 @@ class ICalendar implements SplitterInterface
     /**
      * Constructor.
      *
-     * The splitter should receive an readable file stream as its input.
+     * The splitter should receive a readable file stream as its input.
      *
      * @param resource $input
      * @param int      $options parser options, see the OPTIONS constants
@@ -46,7 +46,7 @@ class ICalendar implements SplitterInterface
     {
         $data = VObject\Reader::read($input, $options);
 
-        if (!$data instanceof VObject\Component\VCalendar) {
+        if (!$data instanceof VCalendar) {
             throw new VObject\ParseException('Supplied input could not be parsed as VCALENDAR.');
         }
 

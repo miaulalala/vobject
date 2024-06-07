@@ -2,8 +2,6 @@
 
 namespace Sabre\VObject\Recur\EventIterator;
 
-use DateTime;
-use DateTimeZone;
 use PHPUnit\Framework\TestCase;
 use Sabre\VObject\Component\VCalendar;
 use Sabre\VObject\Reader;
@@ -27,9 +25,9 @@ END:VCALENDAR
 ICS;
 
         $vcal = Reader::read($input);
-        $this->assertInstanceOf(VCalendar::class, $vcal);
+        self::assertInstanceOf(VCalendar::class, $vcal);
 
-        $vcal = $vcal->expand(new DateTime('2015-01-01'), new DateTime('2015-01-31'));
+        $vcal = $vcal->expand(new \DateTime('2015-01-01'), new \DateTime('2015-01-31'));
         $output = <<<ICS
 BEGIN:VCALENDAR
 VERSION:2.0
@@ -60,7 +58,7 @@ END:VEVENT
 END:VCALENDAR
 
 ICS;
-        $this->assertVObjectEqualsVObject($output, $vcal);
+        self::assertVObjectEqualsVObject($output, $vcal);
     }
 
     public function testExpandWithReferenceTimezone(): void
@@ -78,12 +76,12 @@ END:VCALENDAR
 ICS;
 
         $vcal = Reader::read($input);
-        $this->assertInstanceOf(VCalendar::class, $vcal);
+        self::assertInstanceOf(VCalendar::class, $vcal);
 
         $vcal = $vcal->expand(
-            new DateTime('2015-01-01'),
-            new DateTime('2015-01-31'),
-            new DateTimeZone('Europe/Berlin')
+            new \DateTime('2015-01-01'),
+            new \DateTime('2015-01-31'),
+            new \DateTimeZone('Europe/Berlin')
         );
 
         $output = <<<ICS
@@ -116,6 +114,6 @@ END:VEVENT
 END:VCALENDAR
 
 ICS;
-        $this->assertVObjectEqualsVObject($output, $vcal);
+        self::assertVObjectEqualsVObject($output, $vcal);
     }
 }

@@ -31,7 +31,7 @@ VCF;
         $mimeDir = new MimeDir();
         $mimeDir->setCharset('ISO-8859-1');
         $vcard = $mimeDir->parse($vcard);
-        $this->assertEquals("umlaut u - \xC3\xBC", $vcard->FN->getValue());
+        self::assertEquals("umlaut u - \xC3\xBC", $vcard->FN->getValue());
     }
 
     public function testDecodeInlineLatin1(): void
@@ -45,7 +45,7 @@ VCF;
 
         $mimeDir = new MimeDir();
         $vcard = $mimeDir->parse($vcard);
-        $this->assertEquals("umlaut u - \xC3\xBC", $vcard->FN->getValue());
+        self::assertEquals("umlaut u - \xC3\xBC", $vcard->FN->getValue());
     }
 
     public function testIgnoreCharsetVCard30(): void
@@ -59,7 +59,7 @@ VCF;
 
         $mimeDir = new MimeDir();
         $vcard = $mimeDir->parse($vcard);
-        $this->assertEquals("foo-bar - \xFC", $vcard->FN->getValue());
+        self::assertEquals("foo-bar - \xFC", $vcard->FN->getValue());
     }
 
     public function testDontDecodeLatin1(): void
@@ -77,7 +77,7 @@ VCF;
         // the encoding was set to UTF-8. The result is actually invalid
         // and the validator should report this, but it tests effectively
         // that we pass through the string byte-by-byte.
-        $this->assertEquals("umlaut u - \xFC", $vcard->FN->getValue());
+        self::assertEquals("umlaut u - \xFC", $vcard->FN->getValue());
     }
 
     public function testDecodeUnsupportedCharset(): void
@@ -101,6 +101,25 @@ VCF;
         $mimeDir->parse($vcard);
     }
 
+    public function provideEmptyParserInput(): array
+    {
+        return [
+            [null, 'No input provided to parse'],
+            ['', 'End of document reached prematurely'],
+        ];
+    }
+
+    /**
+     * @dataProvider provideEmptyParserInput
+     */
+    public function testParseEmpty($input, $expectedExceptionMessage): void
+    {
+        $this->expectException(ParseException::class);
+        $this->expectExceptionMessage($expectedExceptionMessage);
+        $mimeDir = new MimeDir();
+        $mimeDir->parse($input);
+    }
+
     public function testDecodeWindows1252(): void
     {
         $vcard = <<<VCF
@@ -113,7 +132,7 @@ VCF;
         $mimeDir = new MimeDir();
         $mimeDir->setCharset('Windows-1252');
         $vcard = $mimeDir->parse($vcard);
-        $this->assertEquals("Euro \xE2\x82\xAC", $vcard->FN->getValue());
+        self::assertEquals("Euro \xE2\x82\xAC", $vcard->FN->getValue());
     }
 
     public function testDecodeWindows1252Inline(): void
@@ -127,7 +146,7 @@ VCF;
 
         $mimeDir = new MimeDir();
         $vcard = $mimeDir->parse($vcard);
-        $this->assertEquals("Euro \xE2\x82\xAC", $vcard->FN->getValue());
+        self::assertEquals("Euro \xE2\x82\xAC", $vcard->FN->getValue());
     }
 
     public function testCaseInsensitiveInlineCharset(): void
@@ -143,8 +162,8 @@ VCF;
         $mimeDir = new MimeDir();
         $vcard = $mimeDir->parse($vcard);
         // we can do a simple assertion here. As long as we don't get an exception, everything is thing
-        $this->assertEquals('Euro', $vcard->FN->getValue());
-        $this->assertEquals('Test2', $vcard->N->getValue());
+        self::assertEquals('Euro', $vcard->FN->getValue());
+        self::assertEquals('Test2', $vcard->N->getValue());
     }
 
     public function testParsingTwiceSameContent(): void
@@ -164,7 +183,7 @@ EOF;
         $mimeDir = new MimeDir();
         $vcard = $mimeDir->parse($card);
         // we can do a simple assertion here. As long as we don't get an exception, everything is fine
-        $this->assertEquals('20220612', $vcard->VEVENT->DTSTART->getValue());
+        self::assertEquals('20220612', $vcard->VEVENT->DTSTART->getValue());
     }
 
     /**
@@ -176,7 +195,7 @@ EOF;
     {
         $mimeDir = new MimeDir(null, MimeDir::OPTION_IGNORE_INVALID_LINES);
         $vcalendar = $mimeDir->parse($vcalendar);
-        $this->assertInstanceOf(VCalendar::class, $vcalendar);
+        self::assertInstanceOf(VCalendar::class, $vcalendar);
     }
 
     /**

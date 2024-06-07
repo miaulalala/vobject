@@ -2,11 +2,7 @@
 
 namespace Sabre\VObject;
 
-use function preg_replace;
-
 use Sabre\Xml;
-
-use function substr;
 
 /**
  * Property.
@@ -46,8 +42,6 @@ abstract class Property extends Node
 
     /**
      * Current value.
-     *
-     * @var mixed
      */
     protected $value;
 
@@ -56,6 +50,20 @@ abstract class Property extends Node
      * delimiter.
      */
     public string $delimiter = ';';
+
+    /**
+     * The line number in the original iCalendar / vCard file
+     *   that corresponds with the current node
+     *   if the node was read from a file.
+     */
+    public ?int $lineIndex;
+
+    /**
+     * The line string from the original iCalendar / vCard file
+     *   that corresponds with the current node
+     *   if the node was read from a file.
+     */
+    public ?string $lineString;
 
     /**
      * Creates the generic property.
@@ -67,7 +75,7 @@ abstract class Property extends Node
      * @param array             $parameters List of parameters
      * @param string|null       $group      The vcard property group
      */
-    public function __construct(Component $root, ?string $name, $value = null, array $parameters = [], ?string $group = null)
+    public function __construct(Component $root, ?string $name, $value = null, array $parameters = [], ?string $group = null, ?int $lineIndex = null, ?string $lineString = null)
     {
         $this->name = $name;
         $this->group = $group;
@@ -80,6 +88,14 @@ abstract class Property extends Node
 
         if (!is_null($value)) {
             $this->setValue($value);
+        }
+
+        if (!is_null($lineIndex)) {
+            $this->lineIndex = $lineIndex;
+        }
+
+        if (!is_null($lineString)) {
+            $this->lineString = $lineString;
         }
     }
 
@@ -215,7 +231,7 @@ abstract class Property extends Node
 
         $str .= ':'.$this->getRawMimeDirValue();
 
-        $str = preg_replace(
+        $str = \preg_replace(
             '/(
                 (?:^.)?         # 1 additional byte in first line because of missing single space (see next line)
                 .{1,74}         # max 75 bytes per line (1 byte is used for a single space added after every CRLF)
@@ -226,7 +242,7 @@ abstract class Property extends Node
         );
 
         // remove single space after last CRLF
-        return substr($str, 0, -1);
+        return \substr($str, 0, -1);
     }
 
     /**
@@ -285,7 +301,7 @@ abstract class Property extends Node
     }
 
     /**
-     * Hydrate data from a XML subtree, as it would appear in a xCard or xCal
+     * Hydrate data from an XML subtree, as it would appear in a xCard or xCal
      * object.
      *
      * @throws InvalidDataException
@@ -353,7 +369,7 @@ abstract class Property extends Node
      *
      * If the property only had a single value, you will get just that. In the
      * case the property had multiple values, the contents will be escaped and
-     * combined with ,.
+     * combined with comma.
      */
     public function __toString(): string
     {
@@ -364,8 +380,6 @@ abstract class Property extends Node
 
     /**
      * Checks if an array element exists.
-     *
-     * @param mixed $offset
      */
     #[\ReturnTypeWillChange]
     public function offsetExists($offset): bool
@@ -411,13 +425,13 @@ abstract class Property extends Node
      * Creates a new parameter.
      *
      * @param string|int $offset
-     * @param mixed      $value
      */
     #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value): void
     {
         if (is_int($offset)) {
             parent::offsetSet($offset, $value);
+
             // @codeCoverageIgnoreStart
             // This will never be reached, because an exception is always
             // thrown.
@@ -439,6 +453,7 @@ abstract class Property extends Node
     {
         if (is_int($offset)) {
             parent::offsetUnset($offset);
+
             // @codeCoverageIgnoreStart
             // This will never be reached, because an exception is always
             // thrown.
@@ -517,7 +532,7 @@ abstract class Property extends Node
                     str_replace('_', '-', $this->name)
                 );
                 // Removing every other invalid character
-                $this->name = preg_replace('/([^A-Z0-9-])/u', '', $this->name);
+                $this->name = \preg_replace('/([^A-Z0-9-])/u', '', $this->name);
             }
         }
 

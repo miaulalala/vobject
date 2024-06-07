@@ -1,6 +1,16 @@
 ChangeLog
 =========
 
+4.5.2 (2023-01-20)
+------------------
+
+* #603: Support sabre/xml v4 (@gharlan)
+
+4.5.1 (2022-10-09)
+------------------
+
+* #597: Remove utf8_encode to easily support PHP 8.2 (@phil-davis)
+
 4.5.0 (2022-08-17)
 ------------------
 
@@ -582,7 +592,7 @@ ChangeLog
 * Updated: Windows timezone mapping to latest version from unicode.org
 * Changed: The timezone maps are now loaded in from external files, in
   lib/Sabre/VObject/timezonedata.
-* Added: Fixing badly encoded URL's from google contacts vcards.
+* Added: Fixing badly encoded URL's from Google contacts vcards.
 * Fixed: Issue #68. Couldn't decode properties ending in a colon.
 * Fixed: Issue #72. RecurrenceIterator should respect timezone in the UNTIL
   clause.
@@ -656,7 +666,7 @@ ChangeLog
 * Added: Utility to convert between 2.1, 3.0 and 4.0 vCards.
 * Added: You can now add() multiple parameters to a property in one call.
 * Added: Parameter::has() for easily checking if a parameter value exists.
-* Added: VCard::preferred() to find a preferred email, phone number, etc for a
+* Added: VCard::preferred() to find a preferred email, phone number, etc. for a
   contact.
 * Changed: All $duration properties are now public.
 * Added: A few validators for iCalendar documents.
@@ -853,7 +863,7 @@ ChangeLog
 ------------------
 
 * Fixed: Microsoft re-uses their magic numbers for different timezones,
-  specifically id 2 for both Sarajevo and Lisbon). A workaround was added to
+  (specifically id 2 for both Sarajevo and Lisbon). A workaround was added to
   deal with this.
 
 

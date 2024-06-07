@@ -2,9 +2,6 @@
 
 namespace Sabre\VObject;
 
-use DateInterval;
-use DateTimeImmutable;
-use DateTimeZone;
 use PHPUnit\Framework\TestCase;
 
 class DateTimeParserTest extends TestCase
@@ -14,13 +11,13 @@ class DateTimeParserTest extends TestCase
      */
     public function testParseICalendarDuration(): void
     {
-        $this->assertEquals('+1 weeks', DateTimeParser::parseDurationAsString('P1W'));
-        $this->assertEquals('+5 days', DateTimeParser::parseDurationAsString('P5D'));
-        $this->assertEquals('+5 days 3 hours 50 minutes 12 seconds', DateTimeParser::parseDurationAsString('P5DT3H50M12S'));
-        $this->assertEquals('-1 weeks 50 minutes', DateTimeParser::parseDurationAsString('-P1WT50M'));
-        $this->assertEquals('+50 days 3 hours 2 seconds', DateTimeParser::parseDurationAsString('+P50DT3H2S'));
-        $this->assertEquals('+0 seconds', DateTimeParser::parseDurationAsString('+PT0S'));
-        $this->assertEquals(new DateInterval('PT0S'), DateTimeParser::parseDuration('PT0S'));
+        self::assertEquals('+1 weeks', DateTimeParser::parseDurationAsString('P1W'));
+        self::assertEquals('+5 days', DateTimeParser::parseDurationAsString('P5D'));
+        self::assertEquals('+5 days 3 hours 50 minutes 12 seconds', DateTimeParser::parseDurationAsString('P5DT3H50M12S'));
+        self::assertEquals('-1 weeks 50 minutes', DateTimeParser::parseDurationAsString('-P1WT50M'));
+        self::assertEquals('+50 days 3 hours 2 seconds', DateTimeParser::parseDurationAsString('+P50DT3H2S'));
+        self::assertEquals('+0 seconds', DateTimeParser::parseDurationAsString('+PT0S'));
+        self::assertEquals(new \DateInterval('PT0S'), DateTimeParser::parseDuration('PT0S'));
     }
 
     /**
@@ -28,13 +25,19 @@ class DateTimeParserTest extends TestCase
      */
     public function testParseICalendarDurationDateInterval(): void
     {
-        $expected = new DateInterval('P7D');
-        $this->assertEquals($expected, DateTimeParser::parseDuration('P1W'));
-        $this->assertEquals($expected, DateTimeParser::parse('P1W'));
+        $expected = new \DateInterval('P7D');
+        self::assertEquals($expected, DateTimeParser::parseDuration('P1W'));
+        self::assertEquals($expected, DateTimeParser::parse('P1W'));
 
-        $expected = new DateInterval('PT3M');
+        $expected = new \DateInterval('PT3M');
         $expected->invert = true;
-        $this->assertEquals($expected, DateTimeParser::parseDuration('-PT3M'));
+        self::assertEquals($expected, DateTimeParser::parseDuration('-PT3M'));
+    }
+
+    public function testParseDurationZero(): void
+    {
+        $expected = new \DateInterval('PT0S');
+        self::assertEquals($expected, DateTimeParser::parseDuration('P'));
     }
 
     public function testParseICalendarDurationFail(): void
@@ -47,9 +50,9 @@ class DateTimeParserTest extends TestCase
     {
         $dateTime = DateTimeParser::parseDateTime('20100316T141405');
 
-        $compare = new DateTimeImmutable('2010-03-16 14:14:05', new DateTimeZone('UTC'));
+        $compare = new \DateTimeImmutable('2010-03-16 14:14:05', new \DateTimeZone('UTC'));
 
-        $this->assertEquals($compare, $dateTime);
+        self::assertEquals($compare, $dateTime);
     }
 
     /**
@@ -77,8 +80,8 @@ class DateTimeParserTest extends TestCase
     {
         $dateTime = DateTimeParser::parseDateTime('20100316T141405Z');
 
-        $compare = new DateTimeImmutable('2010-03-16 14:14:05', new DateTimeZone('UTC'));
-        $this->assertEquals($compare, $dateTime);
+        $compare = new \DateTimeImmutable('2010-03-16 14:14:05', new \DateTimeZone('UTC'));
+        self::assertEquals($compare, $dateTime);
     }
 
     /**
@@ -88,8 +91,8 @@ class DateTimeParserTest extends TestCase
     {
         $dateTime = DateTimeParser::parseDateTime('20101211T160000Z');
 
-        $compare = new DateTimeImmutable('2010-12-11 16:00:00', new DateTimeZone('UTC'));
-        $this->assertEquals($compare, $dateTime);
+        $compare = new \DateTimeImmutable('2010-12-11 16:00:00', new \DateTimeZone('UTC'));
+        self::assertEquals($compare, $dateTime);
     }
 
     /**
@@ -97,22 +100,22 @@ class DateTimeParserTest extends TestCase
      */
     public function testParseICalendarDateTimeCustomTimeZone(): void
     {
-        $dateTime = DateTimeParser::parseDateTime('20100316T141405', new DateTimeZone('Europe/Amsterdam'));
+        $dateTime = DateTimeParser::parseDateTime('20100316T141405', new \DateTimeZone('Europe/Amsterdam'));
 
-        $compare = new DateTimeImmutable('2010-03-16 14:14:05', new DateTimeZone('Europe/Amsterdam'));
-        $this->assertEquals($compare, $dateTime);
+        $compare = new \DateTimeImmutable('2010-03-16 14:14:05', new \DateTimeZone('Europe/Amsterdam'));
+        self::assertEquals($compare, $dateTime);
     }
 
     public function testParseICalendarDate(): void
     {
         $dateTime = DateTimeParser::parseDate('20100316');
 
-        $expected = new DateTimeImmutable('2010-03-16 00:00:00', new DateTimeZone('UTC'));
+        $expected = new \DateTimeImmutable('2010-03-16 00:00:00', new \DateTimeZone('UTC'));
 
-        $this->assertEquals($expected, $dateTime);
+        self::assertEquals($expected, $dateTime);
 
         $dateTime = DateTimeParser::parse('20100316');
-        $this->assertEquals($expected, $dateTime);
+        self::assertEquals($expected, $dateTime);
     }
 
     /**
@@ -122,12 +125,12 @@ class DateTimeParserTest extends TestCase
     {
         $dateTime = DateTimeParser::parseDate('45001231');
 
-        $expected = new DateTimeImmutable('4500-12-31 00:00:00', new DateTimeZone('UTC'));
+        $expected = new \DateTimeImmutable('4500-12-31 00:00:00', new \DateTimeZone('UTC'));
 
-        $this->assertEquals($expected, $dateTime);
+        self::assertEquals($expected, $dateTime);
 
         $dateTime = DateTimeParser::parse('45001231');
-        $this->assertEquals($expected, $dateTime);
+        self::assertEquals($expected, $dateTime);
     }
 
     /**
@@ -137,12 +140,12 @@ class DateTimeParserTest extends TestCase
     {
         $dateTime = DateTimeParser::parseDateTime('45001231T235959');
 
-        $expected = new DateTimeImmutable('4500-12-31 23:59:59', new DateTimeZone('UTC'));
+        $expected = new \DateTimeImmutable('4500-12-31 23:59:59', new \DateTimeZone('UTC'));
 
-        $this->assertEquals($expected, $dateTime);
+        self::assertEquals($expected, $dateTime);
 
         $dateTime = DateTimeParser::parse('45001231T235959');
-        $this->assertEquals($expected, $dateTime);
+        self::assertEquals($expected, $dateTime);
     }
 
     /**
@@ -168,7 +171,7 @@ class DateTimeParserTest extends TestCase
      */
     public function testVCardDate(string $input, array $output): void
     {
-        $this->assertEquals(
+        self::assertEquals(
             $output,
             DateTimeParser::parseVCardDateTime($input)
         );
@@ -416,7 +419,7 @@ class DateTimeParserTest extends TestCase
 
     public function testDateAndOrTimeDateWithYearMonthDay(): void
     {
-        $this->assertDateAndOrTimeEqualsTo(
+        self::assertDateAndOrTimeEqualsTo(
             '20150128',
             [
                 'year' => '2015',
@@ -428,7 +431,7 @@ class DateTimeParserTest extends TestCase
 
     public function testDateAndOrTimeDateWithYearMonth(): void
     {
-        $this->assertDateAndOrTimeEqualsTo(
+        self::assertDateAndOrTimeEqualsTo(
             '2015-01',
             [
                 'year' => '2015',
@@ -439,7 +442,7 @@ class DateTimeParserTest extends TestCase
 
     public function testDateAndOrTimeDateWithMonth(): void
     {
-        $this->assertDateAndOrTimeEqualsTo(
+        self::assertDateAndOrTimeEqualsTo(
             '--01',
             [
                 'month' => '01',
@@ -449,7 +452,7 @@ class DateTimeParserTest extends TestCase
 
     public function testDateAndOrTimeDateWithMonthDay(): void
     {
-        $this->assertDateAndOrTimeEqualsTo(
+        self::assertDateAndOrTimeEqualsTo(
             '--0128',
             [
                 'month' => '01',
@@ -460,7 +463,7 @@ class DateTimeParserTest extends TestCase
 
     public function testDateAndOrTimeDateWithDay(): void
     {
-        $this->assertDateAndOrTimeEqualsTo(
+        self::assertDateAndOrTimeEqualsTo(
             '---28',
             [
                 'date' => '28',
@@ -470,7 +473,7 @@ class DateTimeParserTest extends TestCase
 
     public function testDateAndOrTimeTimeWithHour(): void
     {
-        $this->assertDateAndOrTimeEqualsTo(
+        self::assertDateAndOrTimeEqualsTo(
             '13',
             [
                 'hour' => '13',
@@ -480,7 +483,7 @@ class DateTimeParserTest extends TestCase
 
     public function testDateAndOrTimeTimeWithHourMinute(): void
     {
-        $this->assertDateAndOrTimeEqualsTo(
+        self::assertDateAndOrTimeEqualsTo(
             '1353',
             [
                 'hour' => '13',
@@ -491,7 +494,7 @@ class DateTimeParserTest extends TestCase
 
     public function testDateAndOrTimeTimeWithHourSecond(): void
     {
-        $this->assertDateAndOrTimeEqualsTo(
+        self::assertDateAndOrTimeEqualsTo(
             '135301',
             [
                 'hour' => '13',
@@ -503,7 +506,7 @@ class DateTimeParserTest extends TestCase
 
     public function testDateAndOrTimeTimeWithMinute(): void
     {
-        $this->assertDateAndOrTimeEqualsTo(
+        self::assertDateAndOrTimeEqualsTo(
             '-53',
             [
                 'minute' => '53',
@@ -513,7 +516,7 @@ class DateTimeParserTest extends TestCase
 
     public function testDateAndOrTimeTimeWithMinuteSecond(): void
     {
-        $this->assertDateAndOrTimeEqualsTo(
+        self::assertDateAndOrTimeEqualsTo(
             '-5301',
             [
                 'minute' => '53',
@@ -524,7 +527,7 @@ class DateTimeParserTest extends TestCase
 
     public function testDateAndOrTimeTimeWithSecond(): void
     {
-        $this->assertTrue(true);
+        self::assertTrue(true);
 
         /*
          * This is unreachable due to a conflict between date and time pattern.
@@ -534,7 +537,7 @@ class DateTimeParserTest extends TestCase
 
     public function testDateAndOrTimeTimeWithSecondZ(): void
     {
-        $this->assertDateAndOrTimeEqualsTo(
+        self::assertDateAndOrTimeEqualsTo(
             '--01Z',
             [
                 'second' => '01',
@@ -545,7 +548,7 @@ class DateTimeParserTest extends TestCase
 
     public function testDateAndOrTimeTimeWithSecondTZ(): void
     {
-        $this->assertDateAndOrTimeEqualsTo(
+        self::assertDateAndOrTimeEqualsTo(
             '--01+1234',
             [
                 'second' => '01',
@@ -556,7 +559,7 @@ class DateTimeParserTest extends TestCase
 
     public function testDateAndOrTimeDateTimeWithYearMonthDayHour(): void
     {
-        $this->assertDateAndOrTimeEqualsTo(
+        self::assertDateAndOrTimeEqualsTo(
             '20150128T13',
             [
                 'year' => '2015',
@@ -569,7 +572,7 @@ class DateTimeParserTest extends TestCase
 
     public function testDateAndOrTimeDateTimeWithMonthDayHour(): void
     {
-        $this->assertDateAndOrTimeEqualsTo(
+        self::assertDateAndOrTimeEqualsTo(
             '--0128T13',
             [
                 'month' => '01',
@@ -581,7 +584,7 @@ class DateTimeParserTest extends TestCase
 
     public function testDateAndOrTimeDateTimeWithDayHour(): void
     {
-        $this->assertDateAndOrTimeEqualsTo(
+        self::assertDateAndOrTimeEqualsTo(
             '---28T13',
             [
                 'date' => '28',
@@ -592,7 +595,7 @@ class DateTimeParserTest extends TestCase
 
     public function testDateAndOrTimeDateTimeWithDayHourMinute(): void
     {
-        $this->assertDateAndOrTimeEqualsTo(
+        self::assertDateAndOrTimeEqualsTo(
             '---28T1353',
             [
                 'date' => '28',
@@ -604,7 +607,7 @@ class DateTimeParserTest extends TestCase
 
     public function testDateAndOrTimeDateTimeWithDayHourMinuteSecond(): void
     {
-        $this->assertDateAndOrTimeEqualsTo(
+        self::assertDateAndOrTimeEqualsTo(
             '---28T135301',
             [
                 'date' => '28',
@@ -617,7 +620,7 @@ class DateTimeParserTest extends TestCase
 
     public function testDateAndOrTimeDateTimeWithDayHourZ(): void
     {
-        $this->assertDateAndOrTimeEqualsTo(
+        self::assertDateAndOrTimeEqualsTo(
             '---28T13Z',
             [
                 'date' => '28',
@@ -629,7 +632,7 @@ class DateTimeParserTest extends TestCase
 
     public function testDateAndOrTimeDateTimeWithDayHourTZ(): void
     {
-        $this->assertDateAndOrTimeEqualsTo(
+        self::assertDateAndOrTimeEqualsTo(
             '---28T13+1234',
             [
                 'date' => '28',
@@ -641,7 +644,7 @@ class DateTimeParserTest extends TestCase
 
     protected function assertDateAndOrTimeEqualsTo(string $date, array $parts): void
     {
-        $this->assertSame(
+        self::assertSame(
             DateTimeParser::parseVCardDateAndOrTime($date),
             array_merge(
                 [
